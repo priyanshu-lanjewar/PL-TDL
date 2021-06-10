@@ -1,25 +1,46 @@
-import { platform } from 'process';
-import React from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React,{useState} from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
 import Task from './components/Task';
 export default function App() {
+  const [task,setTask] = useState();
+  const [taskItems, setTaskItems] = useState([]);
+  const handleAddTask = () =>{
+    Keyboard.dismiss();
+    setTaskItems([...taskItems,task]);
+    setTask(null);
+  }
+  const completeTask = (index) =>{
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1);
+    setTaskItems(itemsCopy);
+  }
+  
   return (
+    
     <View style={styles.container}>
+      <ScrollView>
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>Todays Task</Text>
         <View style={styles.items}>
-        <Task text="Task1"/>
-        <Task text="Task2"/>
-        <Task/>
-        <Task/>
+        {
+          taskItems.map((item,index)=>{
+            return (
+              <TouchableOpacity onPress={()=>completeTask(index)}>
+                <Task key={index} text={item}/>
+              </TouchableOpacity>
+            )
+            
+          })
+        }
         </View>
         </View> 
+        </ScrollView>
         <KeyboardAvoidingView
         behavior={Platform.OS==='ios'?"padding":"height"}
         style={styles.addTask}>
-          <TextInput style={styles.input} placeholder={"Write New Task"}/>
+          <TextInput style={styles.input} placeholder={"Write New Task"} value={task} onChangeText={text => setTask(text)}/>
         
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>handleAddTask()}>
             <View style={styles.add}>
               <Text style={styles.plus}>+</Text>
             </View>
@@ -55,7 +76,8 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'center',
     alignContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    alignSelf:'center'
     },
 input:{
   paddingVertical:15,
@@ -64,18 +86,30 @@ input:{
   backgroundColor:'#FFFFFF',
   borderRadius:15,
   shadowColor:'black',
-  borderColor:'#C0C0C0',
-  borderWidth:2,
+  borderColor:'pink',
+  borderWidth:5,
   textAlign:'center',
-  marginLeft: 5
+  marginRight:15,
+  shadowColor:'gray',
+  shadowRadius:25
+  
 },
 add:{
-  width:'80%',
+  width:55,
   height:55,
-  borderWidth:2,
-  borderColor:'gray',
+  borderWidth:5,
+  borderColor:'white',
   borderRadius:55,
-  marginRight:25
+  marginRight:50,
+  alignItems:'center',
+  justifyContent:'center',
+  borderColor:'blue',
+  shadowColor:'gray',
+  shadowRadius:25,
 },
-plus:{},
+plus:{
+  color:'blue',
+  fontSize:30
+ 
+},
 });
