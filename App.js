@@ -4,6 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Task from './components/Task';
 
 
+let o=-1;
+let n=1;
+
 export default function App() {
   try {
   useEffect(() => load(),[]);
@@ -12,14 +15,28 @@ export default function App() {
   const [task,setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   
+  const handleAddTaskk = () =>{
+    handleAddTask();
+    
+  }
   const handleAddTask = () =>{
     
    if(task===null) return;
     Keyboard.dismiss();
+    o = taskItems.length;
+    n = o+1;
+    
     setTaskItems([...taskItems,task]);
+    setTask(null);
    
     
-    setTask(null);
+    
+  }
+  const update = () =>{
+    console.log(taskItems);
+    let s = JSON.stringify(taskItems);
+    AsyncStorage.setItem('user', s);
+    updated=false;
     
   }
   const completeTask = (index) =>{
@@ -32,21 +49,18 @@ export default function App() {
   
   const load = ()=>{
     AsyncStorage.getItem('user',(err,res)=>{
-      console.log(err);
        let ta=JSON.parse(res);
        if(ta===null) return;
-       setTaskItems(ta);
-       console.log(ta)
-       
+       setTaskItems(ta);       
       
   })
 }
 
 
  try{
-  console.log(taskItems);
-  let s = JSON.stringify(taskItems);
-  AsyncStorage.setItem('user', s);
+  useEffect(()=>{
+    update();
+  })
   
   
   return(
@@ -82,7 +96,7 @@ export default function App() {
         style={styles.addTask}>
           <TextInput style={styles.input} placeholder={"Write New Task"} value={task} onChangeText={text => setTask(text)}/>
         
-          <TouchableOpacity onPress={()=>handleAddTask()}>
+          <TouchableOpacity onPress={()=>handleAddTaskk()}>
             <View style={styles.add}>
               <Text style={styles.plus}>+</Text>
             </View>
@@ -159,19 +173,19 @@ input:{
   backgroundColor:'#FFFFFF',
   borderRadius:15,
   shadowColor:'black',
-  borderColor:'pink',
+  borderColor:'#294248',
   borderWidth:5,
   textAlign:'center',
   marginRight:15,
   shadowColor:'gray',
-  shadowRadius:25
+  shadowRadius:25,
+  
   
 },
 add:{
   width:55,
   height:55,
   borderWidth:5,
-  borderColor:'white',
   borderRadius:55,
   marginRight:50,
   alignItems:'center',
@@ -179,9 +193,10 @@ add:{
   borderColor:'blue',
   shadowColor:'gray',
   shadowRadius:25,
+  backgroundColor:'#66e592'
 },
 plus:{
-  color:'blue',
+  color:'#5e6135',
   fontSize:30
  
 },
