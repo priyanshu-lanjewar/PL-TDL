@@ -1,13 +1,30 @@
-import React,{useState} from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
+import React,{useState, useEffect} from 'react';
+import {BackHandler, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Task from './components/Task';
+
+
 export default function App() {
+  
+  useEffect(() => load(),[]);
+
+ 
   const [task,setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+  
   const handleAddTask = () =>{
+    
+    if(task===null) return;
     Keyboard.dismiss();
     setTaskItems([...taskItems,task]);
+    let s = JSON.stringify(taskItems);
+    AsyncStorage.setItem('user', s);
+   
+    
+    
+    
     setTask(null);
+    
   }
   const completeTask = (index) =>{
     let itemsCopy = [...taskItems];
@@ -15,24 +32,44 @@ export default function App() {
     setTaskItems(itemsCopy);
   }
   
-  return (
+  const load = ()=>{
+    AsyncStorage.getItem('user',(err,res)=>{
+       let ta=JSON.parse(res);
+       setTaskItems(ta);
+       
+       
+      
+  })
+}
+//load();
+//i===1 ? load() : "";
+
+  
+  return(
     
     <View style={styles.container}>
-      <ScrollView>
-      <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Todays Task</Text>
+
+      <Text style={styles.sectionTitle}>Todays Task</Text>
+      <ScrollView style={styles.tasksWrapper}>
+     
         <View style={styles.items}>
         {
-          taskItems.map((item,index)=>{
-            return (
-              <TouchableOpacity onPress={()=>completeTask(index)}>
-                <Task key={index} text={item}/>
-              </TouchableOpacity>
-            )
-            
-          })
+          
+          
+          
+            taskItems.map((item,index)=>{
+              return (
+                <TouchableOpacity onPress={()=>completeTask(index)}>
+                  
+                 <Task key={index} text={item}/>
+                </TouchableOpacity>
+              )
+              
+            })
+          
         }
-        </View>
+        
+        
         </View> 
         </ScrollView>
         <KeyboardAvoidingView
@@ -58,11 +95,14 @@ const styles = StyleSheet.create({
     
   },
   tasksWrapper:{
-    paddingTop:80,
+    paddingTop:10,
+    marginBottom:"25%",
     paddingHorizontal:20,
 
   },
   sectionTitle:{
+    paddingTop:80,
+    paddingHorizontal:20,
     fontSize:30,
     fontWeight:'bold',
   },
@@ -71,7 +111,7 @@ const styles = StyleSheet.create({
   },
   addTask:{
     position:'absolute',
-    bottom:60,
+    bottom:"2%",
     width:'90%',
     flexDirection:'row',
     justifyContent: 'center',
