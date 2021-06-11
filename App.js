@@ -5,23 +5,19 @@ import Task from './components/Task';
 
 
 export default function App() {
-  
+  try {
   useEffect(() => load(),[]);
-
+  }catch(t){};
  
   const [task,setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   
   const handleAddTask = () =>{
     
-    if(task===null) return;
+   if(task===null) return;
     Keyboard.dismiss();
     setTaskItems([...taskItems,task]);
-    let s = JSON.stringify(taskItems);
-    AsyncStorage.setItem('user', s);
    
-    
-    
     
     setTask(null);
     
@@ -30,22 +26,31 @@ export default function App() {
     let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy);
+    let s = JSON.stringify(taskItems);
+    AsyncStorage.setItem('user', s);
   }
   
   const load = ()=>{
     AsyncStorage.getItem('user',(err,res)=>{
+      console.log(err);
        let ta=JSON.parse(res);
+       if(ta===null) return;
        setTaskItems(ta);
-       
+       console.log(ta)
        
       
   })
 }
-//load();
-//i===1 ? load() : "";
 
+
+ try{
+  console.log(taskItems);
+  let s = JSON.stringify(taskItems);
+  AsyncStorage.setItem('user', s);
+  
   
   return(
+    
     
     <View style={styles.container}>
 
@@ -54,11 +59,10 @@ export default function App() {
      
         <View style={styles.items}>
         {
-          
-          
-          
             taskItems.map((item,index)=>{
+              
               return (
+                
                 <TouchableOpacity onPress={()=>completeTask(index)}>
                   
                  <Task key={index} text={item}/>
@@ -66,9 +70,10 @@ export default function App() {
               )
               
             })
+         
           
         }
-        
+      
         
         </View> 
         </ScrollView>
@@ -86,6 +91,34 @@ export default function App() {
 
     </View>
   );
+      }catch(e){
+        return(
+          <View style={styles.container}>
+
+          <Text style={styles.sectionTitle}>Todays Task</Text>
+          <ScrollView style={styles.tasksWrapper}>
+         
+            <View style={styles.items}>
+          
+            
+            </View> 
+            </ScrollView>
+            <KeyboardAvoidingView
+            behavior={Platform.OS==='ios'?"padding":"height"}
+            style={styles.addTask}>
+              <TextInput style={styles.input} placeholder={"Write New Task"} value={task} onChangeText={text => setTask(text)}/>
+            
+              <TouchableOpacity onPress={()=>handleAddTask()}>
+                <View style={styles.add}>
+                  <Text style={styles.plus}>+</Text>
+                </View>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+    
+        </View>
+        );
+      }
+     
 }
 
 const styles = StyleSheet.create({
