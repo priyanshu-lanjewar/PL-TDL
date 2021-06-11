@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react';
-import {BackHandler, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
+import { ToastContainer, toast } from 'react-toastify';
+import {Alert,BackHandler, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Task from './components/Task';
 
@@ -8,13 +9,37 @@ let o=-1;
 let n=1;
 
 export default function App() {
+  
+  
+
   try {
   useEffect(() => load(),[]);
   }catch(t){};
  
   const [task,setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
-  
+ 
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const handleAddTaskk = () =>{
     handleAddTask();
     
@@ -36,7 +61,6 @@ export default function App() {
     console.log(taskItems);
     let s = JSON.stringify(taskItems);
     AsyncStorage.setItem('user', s);
-    updated=false;
     
   }
   const completeTask = (index) =>{
@@ -57,7 +81,7 @@ export default function App() {
 }
 
 
- try{
+
   useEffect(()=>{
     update();
   })
@@ -105,33 +129,6 @@ export default function App() {
 
     </View>
   );
-      }catch(e){
-        return(
-          <View style={styles.container}>
-
-          <Text style={styles.sectionTitle}>Todays Task</Text>
-          <ScrollView style={styles.tasksWrapper}>
-         
-            <View style={styles.items}>
-          
-            
-            </View> 
-            </ScrollView>
-            <KeyboardAvoidingView
-            behavior={Platform.OS==='ios'?"padding":"height"}
-            style={styles.addTask}>
-              <TextInput style={styles.input} placeholder={"Write New Task"} value={task} onChangeText={text => setTask(text)}/>
-            
-              <TouchableOpacity onPress={()=>handleAddTask()}>
-                <View style={styles.add}>
-                  <Text style={styles.plus}>+</Text>
-                </View>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
-    
-        </View>
-        );
-      }
      
 }
 
