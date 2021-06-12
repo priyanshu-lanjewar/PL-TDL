@@ -1,5 +1,4 @@
 import React,{useState, useEffect} from 'react';
-import { ToastContainer, toast } from 'react-toastify';
 import {Alert,BackHandler, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View ,Keyboard, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Task from './components/Task';
@@ -94,11 +93,10 @@ export default function App() {
 
       <Text style={styles.sectionTitle}>Todays Task</Text>
       <ScrollView style={styles.tasksWrapper}>
-     
+      
         <View style={styles.items}>
         {
             taskItems.map((item,index)=>{
-              
               return (
                 
                 <TouchableOpacity onPress={()=>completeTask(index)}>
@@ -106,12 +104,8 @@ export default function App() {
                  <Task key={index} text={item}/>
                 </TouchableOpacity>
               )
-              
-            })
-         
-          
+            })  
         }
-      
         
         </View> 
         </ScrollView>
