@@ -2,13 +2,17 @@
 # PL-TDL
 A simple TODO list app where you can add Tasks and Tap them to Delete once they are done.
 
+## About Development
+![](https://img.shields.io/badge/React%20Native-App-green) ![](https://img.shields.io/badge/Javascript-100%25-yellow) ![](https://img.shields.io/badge/Expo-SDK%2041-orange)
+
+
 ## Features 
 - Add Task By Simple tap.
 - Delete Tasks by a simple task.
 - No Fear off Data after closing app, it will be stored.
 
 ##  Installation
-- To Download the app click  [here]()
+- To Download the app click  [here](https://github.com/priyanshu-lanjewar/PL-TDL/releases/download/1/pl-tdl.apk)
 - Click on **pl-tdl.apk** and install.
 - Done. !! 
 
