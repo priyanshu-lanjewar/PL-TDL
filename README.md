@@ -18,5 +18,5 @@ A simple TODO list app where you can add Tasks and Tap them to Delete once they 
 - Done. !!
 ## Screenshots
 
-<img src="screenshots/launch_screen.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/main_screen.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/task_add_screen.png" width="300" height="600"/> 
+<img src="screenshots/launch_screen.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/main_screen.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/task_add_screen.png" width="300" height="600"/> &nbsp;&nbsp; 
 <img src="screenshots/add_task.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/single_task.png" width="300" height="600"/> &nbsp;&nbsp; <img src="screenshots/multiple_task.png" width="300" height="600"/> 
